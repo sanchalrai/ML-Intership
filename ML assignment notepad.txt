@@ -1,0 +1,62 @@
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+p=pd.read_csv("C:\\Knight ML Assignment\\Data\\test.csv")
+p
+
+p=pd.read_csv("C:\\Knight ML Assignment\\Data\\train.csv")
+p
+
+sns.heatmap(p.corr())
+sns.distplot(p['points'],kde=False,bins=30)
+sns.barplot(x='price',y='variety',data=p)
+
+p.keys()
+p['user_name']
+p['country']
+print(p['review_title'])
+p['points']
+p['price']
+p['variety']
+
+wine_df=pd.DataFrame(p)
+wine_df
+wine_df.info()
+wine_df.isnull().sum()
+
+sns.pairplot(wine_df, hue='variety')
+sns.countplot(wine_df['variety'])
+
+wine_df.corr()
+x=wine_df.drop(['price'],axis=1)
+x.head(6)
+y=wine_df['price']
+y.head(6)
+
+from sklearn.model_selection import train_test_split
+x_train, x_test, y_train, y_test=train_test_split(x,y, test_size=1/3, random_state=0)
+
+x_train
+x_test
+y_train
+y_test
+
+from sklearn.preprocessing import StandardScaler
+s_x=StandardScaler()
+x_train=s_x.fit_transform(x_train)
+x_test=s_x.fit_transform(x_test)
+
+from sklearn.linear_model import LogisticRegression
+log = LogisticRegression(random_state = 0)
+log.fit(x_train, y_train)
+
+pre=log.predict(x_test)
+pre
+
+from sklearn.metrics import confusion_matrix
+c=confusion_matrix(y_test, pre)
+c
+
+print("ACCURACY",(c/len(pre))*100)
